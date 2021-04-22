@@ -16,17 +16,13 @@ public class ClienteService {
 	
 	public void save(Cliente cliente) {
 		repo.save(cliente);
-		
 	}
 	
 	public Cliente get(Long id_cliente) {
 		return repo.findById(id_cliente).get();
-		
 	}
 	
 	public void delete(Long id_cliente) {
 		repo.deleteById(id_cliente);
 	}
-	
-
 }
