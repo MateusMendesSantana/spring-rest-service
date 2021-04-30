@@ -3,6 +3,7 @@ package br.ucsal.Estacionamento.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ public class LocacaoController {
 	private AgenciaRepository agenciaRepository;
 
 	@RequestMapping(path = "/leases", method = RequestMethod.POST)
-	public Locacao create(Locacao instance) {
+	public Locacao create(@RequestBody Locacao instance) {
 		if (instance.carro != null) {
 			instance.carro = carRepository.findByCodigo(instance.carro.codigo);
 		}
