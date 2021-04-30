@@ -22,30 +22,30 @@ public class FuncionarioController {
 	@Autowired
 	private FuncionarioRepository repository;
 
-	@RequestMapping(path = "/funcionarios", method = RequestMethod.POST)
+	@RequestMapping(path = "/employees", method = RequestMethod.POST)
 	public Funcionario create(@RequestBody Funcionario instance) {
 		return repository.save(instance);
 	}
 
-	@RequestMapping(path = "/funcionarios")
+	@RequestMapping(path = "/employees")
 	public Iterable<Funcionario> list() {
 		return repository.findAll();
 	}
 
-	@RequestMapping(path = "/funcionarios/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/employees/{id}", method = RequestMethod.DELETE)
 	public Funcionario delete(@PathVariable("id") long id) {
 		Funcionario instance = repository.findByCodigo(id);
 		repository.delete(instance);
 		return instance;
 	}
 
-	@RequestMapping(path = "/funcionarios/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/employees/{id}", method = RequestMethod.PUT)
 	public Funcionario update(@PathVariable("id") long id) {
 		Funcionario instance = repository.findByCodigo(id);
 		return instance;
 	}
 
-	@RequestMapping(path = "/funcionarios/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/employees/{id}", method = RequestMethod.GET)
 	public Funcionario findById(@PathVariable("id") long id) {
 		return repository.findByCodigo(id);
 	}

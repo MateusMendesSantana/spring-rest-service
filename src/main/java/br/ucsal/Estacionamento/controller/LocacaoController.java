@@ -60,30 +60,30 @@ public class LocacaoController {
 		return repository.save(l);
 	}
 
-	@RequestMapping(path = "/locacoes", method = RequestMethod.POST)
+	@RequestMapping(path = "/leases", method = RequestMethod.POST)
 	public Locacao create(Locacao instance) {
 		return repository.save(instance);
 	}
 
-	@RequestMapping(path = "/locacoes")
+	@RequestMapping(path = "/leases")
 	public Iterable<Locacao> list() {
 		return repository.findAll();
 	}
 
-	@RequestMapping(path = "/locacoes/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/leases/{id}", method = RequestMethod.DELETE)
 	public Locacao delete(@PathVariable("id") long id) {
 		Locacao instance = repository.findByCodigo(id);
 		repository.delete(instance);
 		return instance;
 	}
 
-	@RequestMapping(path = "/locacoes/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/leases/{id}", method = RequestMethod.PUT)
 	public Locacao update(@PathVariable("id") long id) {
 		Locacao instance = repository.findByCodigo(id);
 		return instance;
 	}
 
-	@RequestMapping(path = "/locacoes/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/leases/{id}", method = RequestMethod.GET)
 	public Locacao findById(@PathVariable("id") long id) {
 		return repository.findByCodigo(id);
 	}

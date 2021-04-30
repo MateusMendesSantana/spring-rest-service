@@ -20,30 +20,30 @@ public class AgenciaController {
 	@Autowired
 	private AgenciaRepository repository;
 
-	@RequestMapping(path = "agencias", method = RequestMethod.POST)
+	@RequestMapping(path = "/agencias", method = RequestMethod.POST)
 	public Agencia create(@RequestBody Agencia instance) {
 		return repository.save(instance);
 	}
 
-	@RequestMapping()
+	@RequestMapping(path = "/agencies")
 	public Iterable<Agencia> list() {
 		return repository.findAll();
 	}
 
-	@RequestMapping(path = "/agencias/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/agencies/{id}", method = RequestMethod.DELETE)
 	public Agencia delete(@PathVariable("id") long id) {
 		Agencia instance = repository.findByCodigo(id);
 		repository.delete(instance);
 		return instance;
 	}
 
-	@RequestMapping(path = "/agencias/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/agencies/{id}", method = RequestMethod.PUT)
 	public Agencia update(@PathVariable("id") long id) {
 		Agencia instance = repository.findByCodigo(id);
 		return instance;
 	}
 
-	@RequestMapping(path = "/agencias/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/agencies/{id}", method = RequestMethod.GET)
 	public Agencia findById(@PathVariable("id") long id) {
 		return repository.findByCodigo(id);
 	}
