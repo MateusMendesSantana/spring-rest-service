@@ -9,79 +9,31 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Locacao implements Serializable {
-	private static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long codigo;
+	public long codigo;
 	
 	@OneToOne
-	private Carro carro;
+	public Carro carro;
 
 	@OneToOne
-	private Cliente cliente;
+	public Cliente cliente;
 
 	@OneToOne
-	private Agencia agencia;
+	public Agencia agencia;
 
 	
-	private String data;
+	public String data;
 
 	
-	private String seguro;
-
-	public long getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(long codigo) {
-		this.codigo = codigo;
-	}
-
-	public Carro getCarro() {
-		return carro;
-	}
-
-	public void setCarro(Carro carro) {
-		this.carro = carro;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public Agencia getAgencia() {
-		return agencia;
-	}
-
-	public void setAgencia(Agencia agencia) {
-		this.agencia = agencia;
-	}
+	public String seguro;
 
 	@Override
 	public String toString() {
 		return "Locacao [codigo=" + codigo + ", carro=" + carro + ", cliente=" + cliente
 				+ ", agencia=" + agencia + "]";
-	}
-
-	public String getData() {
-		return data;
-	}
-
-	public void setData(String data) {
-		this.data = data;
-	}
-
-	public String getSeguro() {
-		return seguro;
-	}
-
-	public void setSeguro(String seguro) {
-		this.seguro = seguro;
 	}
 
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +22,7 @@ public class CarroController {
 	private CarroRepository repository;
 
 	@RequestMapping(path = "/cars", method = RequestMethod.POST)
-	public Carro create(Carro instance) {
+	public Carro create(@RequestBody Carro instance) {
 		return repository.save(instance);
 	}
 

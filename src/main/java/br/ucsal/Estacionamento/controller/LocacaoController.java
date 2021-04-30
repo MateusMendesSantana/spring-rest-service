@@ -43,19 +43,19 @@ public class LocacaoController {
 		Locacao l = new Locacao();
 		
 		if (carro != null) {
-			l.setCarro(carro);
+			l.carro =carro;
 		}
 		
 		if (agencia != null) {
-			l.setAgencia(agencia);
+			l.agencia = agencia;
 		}
 		
 		if (cliente != null) {
-			l.setCliente(cliente);
+			l.cliente = cliente;
 		}
 
-		l.setData(locacao.getData());
-		l.setSeguro(locacao.getSeguro());
+		l.data = locacao.getData();
+		l.seguro = locacao.getSeguro();
 		
 		return repository.save(l);
 	}
