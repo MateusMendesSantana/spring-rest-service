@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import br.ucsal.Estacionamento.models.Agencia;
 import br.ucsal.Estacionamento.models.Cliente;
 import br.ucsal.Estacionamento.repository.AgenciaRepository;
 import br.ucsal.Estacionamento.repository.ClienteRepository;
 
-@Controller()
+@RestController()
 public class AgenciaController {
 	@Autowired
 	private AgenciaRepository repository;
