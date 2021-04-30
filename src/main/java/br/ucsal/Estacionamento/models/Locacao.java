@@ -14,20 +14,13 @@ public class Locacao implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long codigo;
-	
 	@OneToOne
 	public Carro carro;
-
 	@OneToOne
 	public Cliente cliente;
-
 	@OneToOne
 	public Agencia agencia;
-
-	
 	public String data;
-
-	
 	public String seguro;
 
 	@Override

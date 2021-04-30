@@ -20,7 +20,7 @@ public class AgenciaController {
 	@Autowired
 	private AgenciaRepository repository;
 
-	@RequestMapping(path = "/agencias", method = RequestMethod.POST)
+	@RequestMapping(path = "/agencies", method = RequestMethod.POST)
 	public Agencia create(@RequestBody Agencia instance) {
 		return repository.save(instance);
 	}

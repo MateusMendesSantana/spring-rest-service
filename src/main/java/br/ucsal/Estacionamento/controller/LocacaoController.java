@@ -18,50 +18,29 @@ public class LocacaoController {
 	@Autowired
 	private LocacaoRepository repository;
 	@Autowired
-	private CarroRepository cr;
+	private CarroRepository carRepository;
 	@Autowired
-	private ClienteRepository clr;
+	private ClienteRepository clientRepository;
 	@Autowired
-	private AgenciaRepository ar;
-
-	@RequestMapping(value = "/cadastrarLocacao", method = RequestMethod.POST)
-	public Locacao cadastrarLocacao(LocacaoView locacao) {
-		Carro carro = null;
-		if (locacao.getCarro() != null) {
-			carro = cr.findByCodigo(Long.parseLong(locacao.getCarro()));
-		}
-		
-		Agencia agencia = null;
-		if (locacao.getAgencia() != null) {
-			agencia = ar.findByCodigo(Long.parseLong(locacao.getAgencia()));			
-		}
-
-		Cliente cliente = null;
-		if (locacao.getCliente() != null) {
-			cliente = clr.findByCodigo(Long.parseLong(locacao.getCliente()));			
-		}						
-		Locacao l = new Locacao();
-		
-		if (carro != null) {
-			l.carro =carro;
-		}
-		
-		if (agencia != null) {
-			l.agencia = agencia;
-		}
-		
-		if (cliente != null) {
-			l.cliente = cliente;
-		}
-
-		l.data = locacao.getData();
-		l.seguro = locacao.getSeguro();
-		
-		return repository.save(l);
-	}
+	private AgenciaRepository agenciaRepository;
 
 	@RequestMapping(path = "/leases", method = RequestMethod.POST)
 	public Locacao create(Locacao instance) {
+		if (instance.carro != null) {
+			instance.carro = carRepository.findByCodigo(instance.carro.codigo);
+		}
+		
+		if (instance.agencia != null) {
+			instance.agencia = agenciaRepository.findByCodigo(instance.agencia.codigo);			
+		}
+
+		if (instance.cliente != null) {
+			instance.cliente = clientRepository.findByCodigo(instance.cliente.codigo);			
+		}						
+		
+		instance.data = instance.data;
+		instance.seguro = instance.seguro;
+		
 		return repository.save(instance);
 	}
 
@@ -79,8 +58,7 @@ public class LocacaoController {
 
 	@RequestMapping(path = "/leases/{id}", method = RequestMethod.PUT)
 	public Locacao update(@PathVariable("id") long id) {
-		Locacao instance = repository.findByCodigo(id);
-		return instance;
+		return repository.findByCodigo(id);
 	}
 
 	@RequestMapping(path = "/leases/{id}", method = RequestMethod.GET)
