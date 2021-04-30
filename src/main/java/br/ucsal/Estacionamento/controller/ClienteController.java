@@ -3,6 +3,7 @@ package br.ucsal.Estacionamento.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,54 +11,36 @@ import org.springframework.web.servlet.ModelAndView;
 import br.ucsal.Estacionamento.models.Cliente;
 import br.ucsal.Estacionamento.repository.ClienteRepository;
 
-@Controller
+@Controller()
 public class ClienteController {
-	
 	@Autowired
-	private ClienteRepository clr;
+	private ClienteRepository repository;
 
-	@RequestMapping(value = "/cadastrarCliente", method = RequestMethod.GET)
-	public String cadastrarCliente() {
-		return "cliente/formCadastrarCliente";
-	}
-
-	@RequestMapping(value = "/cadastrarCliente", method = RequestMethod.POST)
-	public String cadastrarCliente(Cliente cliente) {
-		clr.save(cliente);
-		return "redirect:/clientes";
-	}
-	
-	@RequestMapping("/clientes")
-	public ModelAndView listaClientes() {
-	ModelAndView mv = new ModelAndView("cliente/clientes");
-	Iterable<Cliente> clientes = clr.findAll();
-	mv.addObject("clientes", clientes);
-	return mv;
-	}
-	
-	@RequestMapping("/deletarCliente")
-	public String deletarCliente(@RequestParam("codigo") long codigo) {
-		Cliente cliente = clr.findByCodigo(codigo);
-		clr.delete(cliente);
-		return "redirect:/clientes";		
-	}
-	
-	@RequestMapping(value = "/editarCliente", method = RequestMethod.GET)
-	public ModelAndView editarEvento(@ModelAttribute("codigo") long codigo) {
-		Cliente cliente = clr.findByCodigo(codigo);		
-		ModelAndView m = new ModelAndView();
-		m.setViewName("/cliente/formEditarCliente");
-		m.addObject("cliente", cliente);
-		return m;	
-	}
-	
-	@RequestMapping(value = "/visualizarCliente", method = RequestMethod.GET)
-	public ModelAndView visualizarCliente(@ModelAttribute("codigo") long codigo) {
-		Cliente cliente = clr.findByCodigo(codigo);
-		ModelAndView m = new ModelAndView();
-		m.setViewName("/cliente/formVisualizarCliente");
-		m.addObject("cliente", cliente);
-		return m;
+	@RequestMapping(path = "/clients", method = RequestMethod.POST)
+	public Cliente create(Cliente cliente) {
+		return repository.save(cliente);
 	}
 
+	@RequestMapping(path = "/clients")
+	public Iterable<Cliente> list() {
+		return repository.findAll();
+	}
+
+	@RequestMapping(path = "/clients/{id}", method = RequestMethod.DELETE)
+	public Cliente delete(@PathVariable("id") long id) {
+		Cliente cliente = repository.findByCodigo(id);
+		repository.delete(cliente);
+		return cliente;
+	}
+
+	@RequestMapping(path = "/clients/{id}", method = RequestMethod.PUT)
+	public Cliente update(@PathVariable("id") long id) {
+		Cliente cliente = repository.findByCodigo(id);
+		return cliente;
+	}
+
+	@RequestMapping(path = "/clients/{id}", method = RequestMethod.GET)
+	public Cliente findById(@PathVariable("id") long id) {
+		return repository.findByCodigo(id);
+	}
 }

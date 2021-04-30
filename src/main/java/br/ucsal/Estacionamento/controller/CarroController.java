@@ -3,60 +3,47 @@ package br.ucsal.Estacionamento.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import br.ucsal.Estacionamento.models.Agencia;
 import br.ucsal.Estacionamento.models.Carro;
+import br.ucsal.Estacionamento.repository.AgenciaRepository;
 import br.ucsal.Estacionamento.repository.CarroRepository;
 
-@Controller
+@Controller()
 public class CarroController {
 	@Autowired
-	private CarroRepository cr;
+	private CarroRepository repository;
 
-	@RequestMapping(value = "/cadastrarCarro", method = RequestMethod.GET)
-	public String cadastrarCarro() {
-		return "carro/formCadastrarCarro";
-	}
-
-	@RequestMapping(value = "/cadastrarCarro", method = RequestMethod.POST)
-	public String cadastrarCarro(Carro carro) {
-		cr.save(carro);
-		return "redirect:/carros";
+	@RequestMapping(path = "/cars", method = RequestMethod.POST)
+	public Carro create(Carro instance) {
+		return repository.save(instance);
 	}
 
-	@RequestMapping("/carros")
-	public ModelAndView listaCarros() {
-		ModelAndView mv = new ModelAndView("carro/carros");
-		Iterable<Carro> carros = cr.findAll();
-		mv.addObject("carros", carros);
-		return mv;
-	}
-	
-	@RequestMapping("/deletarCarro")
-	public String deletarCarro(@RequestParam("codigo") long codigo) {
-		Carro carro = cr.findByCodigo(codigo);
-		cr.delete(carro);
-		return "redirect:/carros";		
-	}
-	
-	@RequestMapping(value = "/editarCarro", method = RequestMethod.GET)
-	public ModelAndView editarCarro(@ModelAttribute("codigo") long codigo) {
-		Carro carro = cr.findByCodigo(codigo);		
-		ModelAndView m = new ModelAndView();
-		m.setViewName("/carro/formEditarCarro");
-		m.addObject("carro", carro);
-		return m;	
-	}
-	
-	@RequestMapping(value = "/visualizarCarro", method = RequestMethod.GET)
-	public ModelAndView visualizarCarro(@ModelAttribute("codigo") long codigo) {
-		Carro carro = cr.findByCodigo(codigo);		
-		ModelAndView m = new ModelAndView();
-		m.setViewName("/carro/formVisualizarCarro");
-		m.addObject("carro", carro);
-		return m;
+	@RequestMapping(path = "/cars")
+	public Iterable<Carro> list() {
+		return repository.findAll();
 	}
 
+	@RequestMapping(path = "/cars/{id}", method = RequestMethod.DELETE)
+	public Carro delete(@PathVariable("id") long id) {
+		Carro instance = repository.findByCodigo(id);
+		repository.delete(instance);
+		return instance;
+	}
+
+	@RequestMapping(path = "/cars/{id}", method = RequestMethod.PUT)
+	public Carro update(@PathVariable("id") long id) {
+		Carro instance = repository.findByCodigo(id);
+		return instance;
+	}
+
+	@RequestMapping(path = "/cars/{id}", method = RequestMethod.GET)
+	public Carro findById(@PathVariable("id") long id) {
+		return repository.findByCodigo(id);
+	}
 }

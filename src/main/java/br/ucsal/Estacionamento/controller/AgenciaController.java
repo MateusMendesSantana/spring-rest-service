@@ -3,63 +3,47 @@ package br.ucsal.Estacionamento.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import br.ucsal.Estacionamento.models.Agencia;
+import br.ucsal.Estacionamento.models.Cliente;
 import br.ucsal.Estacionamento.repository.AgenciaRepository;
+import br.ucsal.Estacionamento.repository.ClienteRepository;
 
-@Controller
+@Controller()
 public class AgenciaController {
 	@Autowired
-	private AgenciaRepository ar;
+	private AgenciaRepository repository;
 
-	@RequestMapping(value = "/cadastrarAgencia", method = RequestMethod.GET)
-	public String cadastrarAgencia() {
-		return "agencia/formCadastrarAgencia";
+	@RequestMapping(path = "agencias", method = RequestMethod.POST)
+	public Agencia create(Agencia instance) {
+		return repository.save(instance);
 	}
 
-	@RequestMapping(value = "/cadastrarAgencia", method = RequestMethod.POST)
-	public String cadastrarAgencia(Agencia agencia) {
-		ar.save(agencia);
-		
-		return "redirect:/agencias";
+	@RequestMapping()
+	public Iterable<Agencia> list() {
+		return repository.findAll();
 	}
-	
 
-	@RequestMapping("/agencias")
-	public ModelAndView listaAgencias() {
-		ModelAndView mv = new ModelAndView("agencia/agencias");
-		Iterable<Agencia> agencias = ar.findAll();
-		mv.addObject("agencias", agencias);
-		return mv;
-		
+	@RequestMapping(path = "/agencias/{id}", method = RequestMethod.DELETE)
+	public Agencia delete(@PathVariable("id") long id) {
+		Agencia instance = repository.findByCodigo(id);
+		repository.delete(instance);
+		return instance;
 	}
-	
-	@RequestMapping("/deletarAgencia")
-	public String deletarAgencia(@RequestParam("codigo") long codigo) {
-		Agencia agencia = ar.findByCodigo(codigo);
-		ar.delete(agencia);
-		return "redirect:/agencias";		
+
+	@RequestMapping(path = "/agencias/{id}", method = RequestMethod.PUT)
+	public Agencia update(@PathVariable("id") long id) {
+		Agencia instance = repository.findByCodigo(id);
+		return instance;
 	}
-	
-	@RequestMapping(value = "/editarAgencia", method = RequestMethod.GET)
-	public ModelAndView editarAgencia(@ModelAttribute("codigo") long codigo) {
-		Agencia agencia = ar.findByCodigo(codigo);		
-		ModelAndView m = new ModelAndView();
-		m.setViewName("/agencia/formEditarAgencia");
-		m.addObject("agencia", agencia);
-		return m;	
-	}
-	
-	@RequestMapping(value = "/visualizarAgencia", method = RequestMethod.GET)
-	public ModelAndView visualizarAgencia(@ModelAttribute("codigo") long codigo) {
-		Agencia agencia = ar.findByCodigo(codigo);		
-		ModelAndView m = new ModelAndView();
-		m.setViewName("/agencia/formVisualizarAgencia");
-		m.addObject("agencia", agencia);
-		return m;	
+
+	@RequestMapping(path = "/agencias/{id}", method = RequestMethod.GET)
+	public Agencia findById(@PathVariable("id") long id) {
+		return repository.findByCodigo(id);
 	}
 
 }

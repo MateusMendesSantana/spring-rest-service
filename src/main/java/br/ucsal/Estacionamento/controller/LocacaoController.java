@@ -2,6 +2,7 @@ package br.ucsal.Estacionamento.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,7 +15,7 @@ import br.ucsal.Estacionamento.repository.*;
 public class LocacaoController {
 	
 	@Autowired
-	private LocacaoRepository lr;
+	private LocacaoRepository repository;
 	@Autowired
 	private CarroRepository cr;
 	@Autowired
@@ -22,23 +23,8 @@ public class LocacaoController {
 	@Autowired
 	private AgenciaRepository ar;
 
-	
-	@RequestMapping(value = "/cadastrarLocacao", method = RequestMethod.GET)
-	public ModelAndView cadastrarLocacao() {
-		//ModelAndView mv = new ModelAndView("locacao/locacoes");
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/locacao/formCadastrarLocacao");
-		Iterable<Carro> carros = cr.findAll();
-		mv.addObject("carros", carros);
-		Iterable<Cliente> clientes = clr.findAll();
-		mv.addObject("clientes", clientes);	
-		Iterable<Agencia> agencias = ar.findAll();
-		mv.addObject("agencias", agencias);
-		return mv;
-	}
-	
 	@RequestMapping(value = "/cadastrarLocacao", method = RequestMethod.POST)
-	public String cadastrarLocacao(LocacaoView locacao) {
+	public Locacao cadastrarLocacao(LocacaoView locacao) {
 		Carro carro = null;
 		if (locacao.getCarro() != null) {
 			carro = cr.findByCodigo(Long.parseLong(locacao.getCarro()));
@@ -70,15 +56,34 @@ public class LocacaoController {
 		l.setData(locacao.getData());
 		l.setSeguro(locacao.getSeguro());
 		
-		lr.save(l);
-		return "redirect:/locacoes";
+		return repository.save(l);
 	}
-	
-	@RequestMapping("/locacoes")
-	public ModelAndView listaLocacoes() {
-		ModelAndView mv = new ModelAndView("locacao/locacoes");
-		Iterable<Locacao> locacoes = lr.findAll();
-		mv.addObject("locacoes", locacoes);
-		return mv;
+
+	@RequestMapping(path = "/locacoes", method = RequestMethod.POST)
+	public Locacao create(Locacao instance) {
+		return repository.save(instance);
+	}
+
+	@RequestMapping(path = "/locacoes")
+	public Iterable<Locacao> list() {
+		return repository.findAll();
+	}
+
+	@RequestMapping(path = "/locacoes/{id}", method = RequestMethod.DELETE)
+	public Locacao delete(@PathVariable("id") long id) {
+		Locacao instance = repository.findByCodigo(id);
+		repository.delete(instance);
+		return instance;
+	}
+
+	@RequestMapping(path = "/locacoes/{id}", method = RequestMethod.PUT)
+	public Locacao update(@PathVariable("id") long id) {
+		Locacao instance = repository.findByCodigo(id);
+		return instance;
+	}
+
+	@RequestMapping(path = "/locacoes/{id}", method = RequestMethod.GET)
+	public Locacao findById(@PathVariable("id") long id) {
+		return repository.findByCodigo(id);
 	}
 }

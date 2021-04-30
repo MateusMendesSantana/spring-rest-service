@@ -3,61 +3,49 @@ package br.ucsal.Estacionamento.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import br.ucsal.Estacionamento.models.Carro;
 import br.ucsal.Estacionamento.models.Funcionario;
+import br.ucsal.Estacionamento.repository.CarroRepository;
 import br.ucsal.Estacionamento.repository.FuncionarioRepository;
 
-@Controller
+@Controller()
 public class FuncionarioController {
 
 	@Autowired
-	private FuncionarioRepository fr;
+	private FuncionarioRepository repository;
 
-	@RequestMapping(value = "/cadastrarFuncionario", method = RequestMethod.GET)
-	public String cadastrarFuncionario() {
-		return "funcionario/formCadastrarFuncionario";
+	@RequestMapping(path = "/funcionarios", method = RequestMethod.POST)
+	public Funcionario create(Funcionario instance) {
+		return repository.save(instance);
 	}
 
-	@RequestMapping(value = "/cadastrarFuncionario", method = RequestMethod.POST)
-	public String cadastrarFuncionario(Funcionario funcionario) {
-		fr.save(funcionario);
-		return "redirect:/funcionarios";
+	@RequestMapping(path = "/funcionarios")
+	public Iterable<Funcionario> list() {
+		return repository.findAll();
 	}
 
-	@RequestMapping("/funcionarios")
-	public ModelAndView listaFuncionarios() {
-		ModelAndView mv = new ModelAndView("funcionario/funcionarios");
-		Iterable<Funcionario> funcionarios = fr.findAll();
-		mv.addObject("funcionarios", funcionarios);
-		return mv;
+	@RequestMapping(path = "/funcionarios/{id}", method = RequestMethod.DELETE)
+	public Funcionario delete(@PathVariable("id") long id) {
+		Funcionario instance = repository.findByCodigo(id);
+		repository.delete(instance);
+		return instance;
 	}
 
-	@RequestMapping("/deletarFuncionario")
-	public String deletarFuncionario(@RequestParam("codigo") long codigo) {
-		Funcionario funcionario = fr.findByCodigo(codigo);
-		fr.delete(funcionario);
-		return "redirect:/funcionarios";
+	@RequestMapping(path = "/funcionarios/{id}", method = RequestMethod.PUT)
+	public Funcionario update(@PathVariable("id") long id) {
+		Funcionario instance = repository.findByCodigo(id);
+		return instance;
 	}
 
-	@RequestMapping(value = "/editarFuncionario", method = RequestMethod.GET)
-	public ModelAndView editarFuncionario(@ModelAttribute("codigo") long codigo) {
-		Funcionario funcionario = fr.findByCodigo(codigo);
-		ModelAndView m = new ModelAndView();
-		m.setViewName("/funcionario/formEditarFuncionario");
-		m.addObject("funcionario", funcionario);
-		return m;
-	}
-	
-	@RequestMapping(value = "/visualizarFuncionario", method = RequestMethod.GET)
-	public ModelAndView visualizarFuncionario(@ModelAttribute("codigo") long codigo) {
-		Funcionario funcionario = fr.findByCodigo(codigo);
-		ModelAndView m = new ModelAndView();
-		m.setViewName("/funcionario/formVisualizarFuncionario");
-		m.addObject("funcionario", funcionario);
-		return m;
+	@RequestMapping(path = "/funcionarios/{id}", method = RequestMethod.GET)
+	public Funcionario findById(@PathVariable("id") long id) {
+		return repository.findByCodigo(id);
 	}
 
 }
